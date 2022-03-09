@@ -1,13 +1,11 @@
-#include <ezButton.h>
-
 //pinout won't change - make const
 #define BLUE 3
 #define GREEN 5
 #define RED 6
-ezButton redButton(7);
-ezButton greenButton(8);
-ezButton blueButton(12);
-ezButton powerButton(13);
+#define BTN_R 7
+#define BTN_GR 8
+#define BTN_BL 12
+#define BTN_PWR 13
 
 // btn states change - make var
 int blueLedState = LOW;
@@ -29,35 +27,30 @@ void setup() {
   //start red off
   pinMode(RED, OUTPUT);
   digitalWrite(RED, LOW);
-  redButton.setDebounceTime(50);
-  redButton.loop();
-  currentRed = redButton.getState();
+  pinMode(BTN_R, INPUT_PULLUP);
+  currentRed = digitalRead(BTN_R);
 
   //start green off
   pinMode(GREEN, OUTPUT);
   digitalWrite(GREEN, LOW);
-  greenButton.setDebounceTime(50);
-  greenButton.loop();
-  currentGreen = greenButton.getState();
+  pinMode(BTN_GR, INPUT_PULLUP);
+  currentGreen = digitalRead(BTN_GR);
 
   //start blue off
   pinMode(BLUE, OUTPUT);
   digitalWrite(BLUE, LOW);
-  blueButton.setDebounceTime(50);
-  blueButton.loop();
-  currentBlue = blueButton.getState();
+  pinMode(BTN_BL, INPUT_PULLUP);
+  currentBlue = digitalRead(BTN_BL);
 
   //get power button state for toggle
-  powerButton.setDebounceTime(50);
-  powerButton.loop();
-  currentPower = powerButton.getState();
+  pinMode(BTN_PWR, INPUT_PULLUP);
+  currentPower = digitalRead(BTN_PWR);
 }
 
 void loop() {
   //check power toggle first
   lastPower = currentPower;
-  powerButton.loop();
-  currentPower = powerButton.getState();
+  currentPower = digitalRead(BTN_PWR);
   if(lastPower == LOW && currentPower == HIGH){
     //power button has been pressed, toggle power state on all
     powerState = !powerState;
@@ -74,24 +67,21 @@ void loop() {
   else {
     //update individual button states
     lastRed = currentRed;
-    redButton.loop();
-    currentRed = redButton.getState();
+    currentRed = digitalRead(BTN_R);
     if(lastRed == LOW && currentRed == HIGH) {
       //red pressed, toggle red led
       redLedState = !redLedState;
     }
   
     lastGreen = currentGreen;
-    greenButton.loop();
-    currentGreen = greenButton.getState();
+    currentGreen = digitalRead(BTN_GR);
     if(lastGreen == LOW && currentGreen == HIGH) {
       //green pressed, toggle green led
       greenLedState = !greenLedState;
     }
     
     lastBlue = currentBlue;
-    blueButton.loop();
-    currentBlue = blueButton.getState();
+    currentBlue = digitalRead(BTN_BL);
       if(lastBlue == LOW && currentBlue == HIGH) {
       //blue pressed, toggle blue led
       blueLedState = !blueLedState;
